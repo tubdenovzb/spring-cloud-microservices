@@ -14,6 +14,9 @@ config-service/.gradle
 deposit-service/build
 deposit-service/.gradle
 
+payment-service/build
+payment-service/.gradle
+
 notification-service/build
 notification-service/.gradle
 
