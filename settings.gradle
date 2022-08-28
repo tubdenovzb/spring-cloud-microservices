@@ -7,5 +7,5 @@ include 'gateway'
 include 'notification-service'
 include 'registry'
 include 'payment-service'
-include 'Transfer-service'
+include 'transfer-service'
 
