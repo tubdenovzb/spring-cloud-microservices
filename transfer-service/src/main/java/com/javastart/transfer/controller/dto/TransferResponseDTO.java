@@ -1,5 +1,6 @@
 package com.javastart.transfer.controller.dto;
 
+import com.javastart.transfer.entity.Transfer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,10 @@ public class TransferResponseDTO {
     private String senderEmail;
 
     private String recipientEmail;
+
+    public TransferResponseDTO(Transfer transfer) {
+        amount = transfer.getAmount();
+        senderEmail = transfer.getSenderEmail();
+        recipientEmail = transfer.getRecipientEmail();
+    }
 }

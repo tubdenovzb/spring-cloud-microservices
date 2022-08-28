@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 public class TransferService {
@@ -77,6 +78,27 @@ public class TransferService {
         AccountResponseDTO recipientAccount = accountServiceClient.getAccountById(recipientAccountId);
 
         return createResponse(amount, senderAccount, recipientAccount);
+    }
+
+    public Transfer getTransferById(Long transferId) {
+        return transferRepository.findById(transferId)
+                .orElseThrow(() -> new TransferServiceException("Unable to find transfer by id: " + transferId));
+    }
+
+    public List<Transfer> getTransfersBySenderBillId(Long senderBillId) {
+        List<Transfer> transferBySenderBillId = transferRepository.getTransferBySenderBillId(senderBillId);
+        if (transferBySenderBillId.isEmpty()) {
+            throw new TransferServiceException("Unable to find transfers for sender's bill: " + senderBillId);
+        }
+        return transferBySenderBillId;
+    }
+
+    public List<Transfer> getTransfersByRecipientBillId(Long recipientBillId) {
+        List<Transfer> transferByRecipientBillId = transferRepository.getTransferByRecipientBillId(recipientBillId);
+        if (transferByRecipientBillId.isEmpty()) {
+            throw new TransferServiceException("Unable to find transfers for recipient's bill: " + recipientBillId);
+        }
+        return transferByRecipientBillId;
     }
 
     private TransferResponseDTO createResponse(BigDecimal amount, AccountResponseDTO senderAccountResponseDTO, AccountResponseDTO recipientAccountResponseDTO) {
