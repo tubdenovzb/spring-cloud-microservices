@@ -1,5 +1,6 @@
 package com.javastart.deposit.controller.dto;
 
+import com.javastart.deposit.entity.Deposit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,10 @@ public class DepositResponseDTO {
 
     private BigDecimal amount;
 
-    private String mail;
+    private String email;
+
+    public DepositResponseDTO(Deposit deposit) {
+        amount = deposit.getAmount();
+        email = deposit.getEmail();
+    }
 }

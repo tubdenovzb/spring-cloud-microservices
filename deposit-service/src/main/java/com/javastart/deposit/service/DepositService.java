@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 public class DepositService {
@@ -60,6 +61,19 @@ public class DepositService {
         AccountResponseDTO account = accountServiceClient.getAccountById(accountId);
         depositRepository.save(new Deposit(amount, defaultBill.getBillId(), OffsetDateTime.now(), account.getEmail()));
         return createResponse(amount, account);
+    }
+
+    public Deposit getDepositById(Long depositId) {
+        return depositRepository.findById(depositId)
+                .orElseThrow(() -> new DepositServiceException("Unable to find deposit by id: " + depositId));
+    }
+
+    public List<Deposit> getDepositsByBillId(Long billId) {
+        List<Deposit> depositsByBillId = depositRepository.getDepositsByBillId(billId);
+        if (depositsByBillId.isEmpty()) {
+            throw new DepositServiceException("Unable to find deposits for bill: " + billId);
+        }
+        return depositsByBillId;
     }
 
     private DepositResponseDTO createResponse(BigDecimal amount, AccountResponseDTO accountResponseDTO) {
