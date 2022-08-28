@@ -53,6 +53,7 @@ public class DepositService {
 
             return createResponse(amount, accountResponseDTO);
         }
+
         BillResponseDTO defaultBill = getDefaultBill(accountId);
         BillRequestDTO billRequestDTO = createBillRequest(amount, defaultBill);
         billServiceClient.update(defaultBill.getBillId(), billRequestDTO);
