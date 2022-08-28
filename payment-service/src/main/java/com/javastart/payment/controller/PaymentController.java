@@ -4,9 +4,10 @@ import com.javastart.payment.controller.dto.PaymentRequestDTO;
 import com.javastart.payment.controller.dto.PaymentResponseDTO;
 import com.javastart.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class PaymentController {
@@ -21,5 +22,17 @@ public class PaymentController {
     @PostMapping("/payments")
     public PaymentResponseDTO payment(@RequestBody PaymentRequestDTO requestDTO) {
         return paymentService.payment(requestDTO.getAccountId(), requestDTO.getBillId(), requestDTO.getAmount());
+    }
+
+    @GetMapping("/payments/{paymentId}")
+    public PaymentResponseDTO getPayment(@PathVariable Long paymentId) {
+        return new PaymentResponseDTO(paymentService.getPaymentById(paymentId));
+    }
+
+    @GetMapping("/payments/bill/{billId}")
+    public List<PaymentResponseDTO> getPaymentsByBillId(@PathVariable Long billId) {
+        return paymentService.getPaymentsByBillId(billId).stream()
+                .map(PaymentResponseDTO::new)
+                .collect(Collectors.toList());
     }
 }

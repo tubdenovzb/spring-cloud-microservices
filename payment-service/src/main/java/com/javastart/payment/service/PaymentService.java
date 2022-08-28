@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -62,6 +63,19 @@ public class PaymentService {
         AccountResponseDTO account = accountServiceClient.getAccountById(accountId);
         paymentRepository.save(new Payment(amount, defaultBill.getBillId(), OffsetDateTime.now(), account.getEmail()));
         return createResponse(amount, account);
+    }
+
+    public Payment getPaymentById(Long paymentId) {
+        return paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentServiceException("Unable to find payment by id: " + paymentId));
+    }
+
+    public List<Payment> getPaymentsByBillId(Long billId) {
+        List<Payment> paymentsByBillId = paymentRepository.getPaymentsByBillId(billId);
+        if (paymentsByBillId.isEmpty()) {
+            throw new PaymentServiceException("Unable to find payments for bill: " + billId);
+        }
+        return paymentsByBillId;
     }
 
     private PaymentResponseDTO createResponse(BigDecimal amount, AccountResponseDTO accountResponseDTO) {
