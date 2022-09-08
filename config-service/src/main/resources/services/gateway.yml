@@ -38,8 +38,8 @@ zuul:
       stripPrefix: false
 
     transfer-service:
-      path: /payments/**
-      serviceId: payment-service
+      path: /transfers/**
+      serviceId: transfer-service
       stripPrefix: false
 
 server:
