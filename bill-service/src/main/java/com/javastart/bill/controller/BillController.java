@@ -30,6 +30,12 @@ public class BillController {
                 billRequestDTO.getIsDefault(), billRequestDTO.getOverdraftEnabled());
     }
 
+    @PostMapping("/default/")
+    public Long createDefaultBill(@RequestBody BillRequestDTO billRequestDTO) {
+        return billService.createDefaultBill(billRequestDTO.getAccountId(), billRequestDTO.getAmount(),
+                billRequestDTO.getIsDefault(), billRequestDTO.getOverdraftEnabled());
+    }
+
     @PutMapping("/{billId}")
     public BillResponseDTO updateBill(@PathVariable Long billId,
                                       @RequestBody BillRequestDTO billRequestDTO) {
