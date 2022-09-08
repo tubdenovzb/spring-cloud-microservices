@@ -10,6 +10,7 @@ import com.javastart.deposit.rest.AccountServiceClient;
 import com.javastart.deposit.rest.BillResponseDTO;
 import com.javastart.deposit.rest.BillServiceClient;
 import com.javastart.depositservice.config.SpringH2DatabaseConfig;
+import com.javastart.depositservice.utils.DepositUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,9 +69,10 @@ public class DepositControllerTest {
 
     @Test
     public void createDeposit() throws Exception {
-        BillResponseDTO billResponseDTO = createBillResponseDTO();
+        BillResponseDTO billResponseDTO = DepositUtil.createBillResponseDTO();
+        AccountResponseDTO accountResponseDTO = DepositUtil.createAccountResponseDTO();
         Mockito.when(billServiceClient.getBillById(ArgumentMatchers.anyLong())).thenReturn(billResponseDTO);
-        Mockito.when(accountServiceClient.getAccountById(ArgumentMatchers.anyLong())).thenReturn(createAccountResponseDTO());
+        Mockito.when(accountServiceClient.getAccountById(ArgumentMatchers.anyLong())).thenReturn(accountResponseDTO);
         MvcResult mvcResult = mockMvc.perform(post("/deposits")
                         .content(REQUEST).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)).andExpect(status()
@@ -81,29 +83,9 @@ public class DepositControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         DepositResponseDTO depositResponseDTO = objectMapper.readValue(body, DepositResponseDTO.class);
 
-        Assertions.assertThat(depositResponseDTO.getEmail()).isEqualTo(deposits.get(0).getEmail());
-        Assertions.assertThat(depositResponseDTO.getAmount()).isEqualTo(BigDecimal.valueOf(3000));
-    }
-
-    private AccountResponseDTO createAccountResponseDTO() {
-        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
-        accountResponseDTO.setAccountId(1L);
-        accountResponseDTO.setBills(Arrays.asList(1L, 2L, 3L));
-        accountResponseDTO.setCreationDate(OffsetDateTime.now());
-        accountResponseDTO.setEmail("lori@cat.xyz");
-        accountResponseDTO.setName("Lori");
-        accountResponseDTO.setPhone("+122334433");
-        return accountResponseDTO;
-    }
-
-    private BillResponseDTO createBillResponseDTO() {
-        BillResponseDTO billResponseDTO = new BillResponseDTO();
-        billResponseDTO.setAccountId(1L);
-        billResponseDTO.setAmount(BigDecimal.valueOf(1000));
-        billResponseDTO.setBillId(1L);
-        billResponseDTO.setCreationDate(OffsetDateTime.now());
-        billResponseDTO.setIsDefault(true);
-        billResponseDTO.setOverdraftEnabled(true);
-        return billResponseDTO;
+        Assertions.assertThat(depositResponseDTO.getEmail())
+                .isEqualTo(deposits.get(0).getEmail());
+        Assertions.assertThat(depositResponseDTO.getAmount()).usingComparator(BigDecimal::compareTo)
+                .isEqualTo(BigDecimal.valueOf(3000));
     }
 }
