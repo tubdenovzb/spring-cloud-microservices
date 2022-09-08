@@ -8,6 +8,7 @@ import com.javastart.deposit.rest.AccountServiceClient;
 import com.javastart.deposit.rest.BillResponseDTO;
 import com.javastart.deposit.rest.BillServiceClient;
 import com.javastart.deposit.service.DepositService;
+import com.javastart.depositservice.utils.DepositUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,9 +43,10 @@ public class DepositServiceTest {
 
     @Test
     public void depositServiceTest_withBillId() {
-        BillResponseDTO billResponseDTO = createBillResponseDTO();
+        BillResponseDTO billResponseDTO = DepositUtil.createBillResponseDTO();
+        AccountResponseDTO accountResponseDTO = DepositUtil.createAccountResponseDTO();
         Mockito.when(billServiceClient.getBillById(ArgumentMatchers.anyLong())).thenReturn(billResponseDTO);
-        Mockito.when(accountServiceClient.getAccountById(ArgumentMatchers.anyLong())).thenReturn(createAccountResponseDTO());
+        Mockito.when(accountServiceClient.getAccountById(ArgumentMatchers.anyLong())).thenReturn(accountResponseDTO);
         DepositResponseDTO deposit = depositService.deposit(null, 1L, BigDecimal.valueOf(1000));
         Assertions.assertThat(deposit.getEmail()).isEqualTo("lori@cat.xyz");
     }
@@ -52,27 +54,5 @@ public class DepositServiceTest {
     @Test(expected = DepositServiceException.class)
     public void depositServiceTest_exception() {
         depositService.deposit(null, null, BigDecimal.valueOf(1000));
-    }
-
-    private AccountResponseDTO createAccountResponseDTO() {
-        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
-        accountResponseDTO.setAccountId(1L);
-        accountResponseDTO.setBills(Arrays.asList(1L, 2L, 3L));
-        accountResponseDTO.setCreationDate(OffsetDateTime.now());
-        accountResponseDTO.setEmail("lori@cat.xyz");
-        accountResponseDTO.setName("Lori");
-        accountResponseDTO.setPhone("+122334433");
-        return accountResponseDTO;
-    }
-
-    private BillResponseDTO createBillResponseDTO() {
-        BillResponseDTO billResponseDTO = new BillResponseDTO();
-        billResponseDTO.setAccountId(1L);
-        billResponseDTO.setAmount(BigDecimal.valueOf(1000));
-        billResponseDTO.setBillId(1L);
-        billResponseDTO.setCreationDate(OffsetDateTime.now());
-        billResponseDTO.setIsDefault(true);
-        billResponseDTO.setOverdraftEnabled(true);
-        return billResponseDTO;
     }
 }
