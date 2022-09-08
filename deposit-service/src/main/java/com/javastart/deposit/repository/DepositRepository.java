@@ -9,4 +9,6 @@ public interface DepositRepository extends CrudRepository<Deposit, Long> {
 
     List<Deposit> getDepositsByBillId(Long billId);
 
+    List<Deposit> findDepositByEmail(String email);
+
 }
