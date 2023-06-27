@@ -2,27 +2,27 @@
 
 This project is realise simple bank system. It's possible create accounts with multiple bills. In the project uses 9 microservices (more details below).   
 Three main operations with balance of bills:
-- deposit;
-- payment;
-- transfer.
+- deposit
+- payment
+- transfer
 
 
 
 ## Tags
-- Microservices;
-- Gradle;
-- Docker;  
-- Spring;
-- Spring Boot;
-- Spring Cloud;
-- PostgreSQL;
-- REST;
-- Eureka;
-- Zuul;
-- Feign;
-- Ribbon;
-- RabbitMQ;
-- AMQP.
+- Microservices
+- Gradle
+- Docker
+- Spring
+- Spring Boot
+- Spring Cloud
+- PostgreSQL
+- REST
+- Eureka
+- Zuul
+- Feign
+- Ribbon
+- RabbitMQ
+- AMQP
 
 ## Architecture of project
 ![Image alt](https://github.com/miihe/spring-cloud-microservices/blob/master/image/Architecture.png?raw=true)
